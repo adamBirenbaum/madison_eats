@@ -58,3 +58,7 @@ for (z in zips){
  
 }
 
+
+yelp_df <- distinct(yelp_data,ID,.keep_all = T)
+write.csv(yelp_df,"~/madison_eats/yelp_df.csv",row.names = F)
+
