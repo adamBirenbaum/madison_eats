@@ -13,7 +13,7 @@ names(categ_list) <- yelp_data$Name
 ui <- bootstrapPage(
   tags$style(type = "text/css", "html, body {width:100%;height:100%}"),
   leafletOutput("mymap", width = "100%", height = "100%"),
-  absolutePanel(top = 10, left = 10, width = 300,
+  absolutePanel(top = 100, left = 20, width = 300,
                 
                   sliderInput("rating","Rating >= ",min = 0, max = 5, step = 0.5, value = 3),
                 sliderInput("n_reviews","Minimum Reviews", min =0, max = 200, step = 10, value = 10),
@@ -61,7 +61,7 @@ server <- function(input, output, session) {
     
     leaflet(data = new_data) %>% setView(lng = -89.426010,lat = 43.071695,zoom = 12) %>% 
       addProviderTiles(providers$Wikimedia) %>% 
-      addMarkers(~Longitude, ~ Latitude, popup = ~Name)
+      addMarkers(~Longitude, ~ Latitude, popup = paste0(new_data$Name,":  <br> ",new_data$Rating," &#9733 <br> ",new_data$Review_Count," reviews"))
   })
 
   
