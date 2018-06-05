@@ -33,7 +33,7 @@ server <- function(input, output, session) {
     
     leaflet(data = new_data) %>% setView(lng = -89.426010,lat = 43.071695,zoom = 12) %>% 
       addProviderTiles(providers$Wikimedia) %>% 
-      addMarkers(~Longitude, ~ Latitude, popup = paste0(new_data$Name,":  <br> ",new_data$Rating," &#9733 <br> ",new_data$Review_Count," reviews"))
+      addMarkers(~Longitude, ~ Latitude, popup = paste0("<a href='",new_data$URL,"' target='_blank'>",new_data$Name,"</a>:  <br> ",new_data$Rating," &#9733 &nbsp; &nbsp;",new_data$Price,"<br> ",new_data$Review_Count," reviews"))
   })
   
   
