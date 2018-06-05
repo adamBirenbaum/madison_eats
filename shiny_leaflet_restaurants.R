@@ -7,7 +7,14 @@ library(dplyr)
 yelp_data <- read.csv("~/madison_eats/yelp_df.csv",stringsAsFactors = F)
 categ <- gsub("|",",",yelp_data$Categories,fixed = T)
 categ_list <- strsplit(categ," , ")
-all_categories <- unique(unlist(categ_list))
+
+
+# want the most popular tags towards the front... but not fast food
+sorted_categories <- names(sort(table(unlist(categ_list)),decreasing = T))
+sorted_categories <- sorted_categories[sorted_categories != "Fast Food"]
+sorted_categories <- c(sorted_categories, "Fast Food")
+
+
 names(categ_list) <- yelp_data$Name
 
 ui <- bootstrapPage(
@@ -15,9 +22,9 @@ ui <- bootstrapPage(
   leafletOutput("mymap", width = "100%", height = "100%"),
   absolutePanel(top = 100, left = 20, width = 300,
                 
-                  sliderInput("rating","Rating >= ",min = 0, max = 5, step = 0.5, value = 3),
+                  sliderInput("rating","Minimum Rating",min = 0, max = 5, step = 0.5, value = 3),
                 sliderInput("n_reviews","Minimum Reviews", min =0, max = 200, step = 10, value = 10),
-                selectizeInput("category","Filter by Categories",choices = all_categories,multiple = T),
+                selectizeInput("category","Filter by Categories",choices = sorted_categories,multiple = T),
                 style = "opacity: 0.9; z-index: 1000;"
                 
                 
@@ -61,7 +68,7 @@ server <- function(input, output, session) {
     
     leaflet(data = new_data) %>% setView(lng = -89.426010,lat = 43.071695,zoom = 12) %>% 
       addProviderTiles(providers$Wikimedia) %>% 
-      addMarkers(~Longitude, ~ Latitude, popup = paste0(new_data$Name,":  <br> ",new_data$Rating," &#9733 <br> ",new_data$Review_Count," reviews"))
+      addMarkers(~Longitude, ~ Latitude, popup = paste0("<a href='",new_data$URL,"' target='_blank'>",new_data$Name,"</a>:  <br> ",new_data$Rating," &#9733 &nbsp; &nbsp;",new_data$Price,"<br> ",new_data$Review_Count," reviews"))
   })
 
   
