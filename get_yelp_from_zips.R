@@ -3,6 +3,14 @@ library(rvest)
 library(dplyr)
 library(httr)
 
+if (Sys.info()["nodename"] == "ADAM-DROPLET"){
+  path_to_app <- "/srv/shiny-server/madison_eats/"
+}else{
+  path_to_app <- "~/api_/srv/shiny-server/madison_eats/"
+}
+
+
+
 zip <- html("https://www.zip-codes.com/county/wi-dane.asp#zipcodes")
 
 zips <- zip %>% 
